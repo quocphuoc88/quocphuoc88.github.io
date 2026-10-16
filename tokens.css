@@ -1,0 +1,180 @@
+/* ============================================================================
+   GPAcc — Design Tokens (nguồn khóa màu/kích thước cho toàn hệ thống)
+   Dùng: import file này, tham chiếu var(--gp-*). ĐỪNG chép hex tay ở nơi khác.
+   Chi tiết quy tắc: xem DESIGN_GUIDELINES.md
+   ============================================================================ */
+
+/* ── FONT TOÀN APP: Segoe UI Variable Text (§GĐ4n3, 09/08/2026 — user chốt) ────────
+   Trước hôm nay app dùng `Be Vietnam Pro`, và nó **KHÔNG có bộ chữ số đều (tabular
+   figures)**. Đo ở 13px: `000.000.000` = 86,53 px còn `111.111.111` = 52,48 px —
+   **lệch 34 px (39%)**; `font-variant-numeric: tabular-nums` lẫn `font-feature-settings:
+   "tnum" 1` đều KHÔNG đổi được gì. App có **186 chỗ khai `tabular-nums` và cả 186 vô
+   hiệu** ⇒ mọi cột số lệch hàng. User bắt được ở màn Tổng quan Hộ: doanh thu tháng 4
+   `323.135.112` (ba số `1`, không số `0` nào) hẹp hơn tháng 3 `365.539.400` 12,5 px.
+
+   Đo 9 font đủ tiếng Việt — chỉ **Be Vietnam Pro và Lexend** là không cứu được bằng
+   `tabular-nums`. `Inter` và `Segoe UI` đều cho hai dãy số bằng nhau. Ngày 09/08/2026,
+   user chọn đúng nét chữ của Tổng quan cho toàn app: `Segoe UI Variable Text`, rồi lùi
+   về `Segoe UI` trên máy không có bản Variable. Stack này giữ chữ số đều và không cần
+   tải font ngoài mạng.
+
+   ‼ Đổi font khác thì PHẢI đo lại phép này trước: dựng span 13px, so bề rộng
+     `000.000.000` với `111.111.111`, có `tabular-nums` mà vẫn lệch là font không dùng
+     được cho phần mềm kế toán. Chi tiết: `thietke/03_chu-va-hinh-khoi.md` §2.0. */
+
+:root {
+  /* ---- Xanh chủ đạo ---- */
+  --gp-primary:        #0F6CBD;
+  --gp-primary-hover:  #0C599C;
+  --gp-header-a:       #0d3f79;   /* gradient header trái  */
+  --gp-header-b:       #0F6CBD;   /* gradient header phải  */
+  --gp-logo-a:         #2a6fdb;   /* gradient logo/login   */
+  --gp-logo-b:         #0d47a1;
+
+  /* ---- Navy mực ---- */
+  --gp-ink:            #12314F;
+
+  /* ---- Khối mã nền tối (xem trước XML…) — §GĐ4an ----
+     ‼ KHÔNG dùng --gp-ink làm nền: nó là màu CHỮ navy, khác nghĩa và khác màu.
+     2 giá trị này bê nguyên từ màn cũ `hddt_dung_xml.html` để bản xem trước không đổi màu. */
+  --gp-pre-bg:         #0f172a;   /* nền khối mã   */
+  --gp-pre-text:       #d5e3f0;   /* chữ trên nền  */
+
+  /* ---- Teal (duyệt/thành công) ---- */
+  --gp-teal:           #0B6B5E;
+  --gp-teal-bright:    #0f8a78;
+  --gp-teal-ink:       #0B4c43;
+
+  /* ---- Vàng hổ phách (chờ/cảnh báo nhẹ) ---- */
+  --gp-amber:          #C19C00;
+  --gp-amber-ink:      #8a6d00;
+  --gp-amber-badge:    #F5B301;
+
+  /* ---- Đỏ (rủi ro/chi/từ chối) ---- */
+  --gp-danger:         #C42B1C;
+
+  /* ---- Tím (AI/máy học · nguồn chuyên biệt CT TNCN; không dùng làm trạng thái) ---- */
+  --gp-ai:             #5b3fbf;
+
+  /* ---- Chữ ---- */
+  --gp-text-head:      #35445E;   /* nhãn cột, tiêu đề nhỏ */
+  --gp-text-muted:     #5B6577;   /* nội dung phụ         */
+  --gp-text-faint:     #8a94a3;   /* chú thích, ngày      */
+  --gp-text-fainter:   #a2abb8;
+  --gp-text-ghost:     #c2cad6;   /* ô rỗng "—"           */
+
+  /* ---- Nút quay lại (§4.2) ---- */
+  /* user chốt 15/07/2026: nút "↩ Văn phòng" phải NỔI RÕ (nền xanh nhạt + viền xanh),
+     KHÔNG nền xám mờ như bản đầu — người dùng không thấy lối ra.
+     Nền/chữ tái dùng --gp-pill-info-*; RIÊNG viền #BCD7F0 chưa có token nào nên khai ở đây
+     thay vì chép hex vào CSS (§0 luật 1: đổi màu chỉ sửa 1 chỗ). */
+  --gp-back-border:    #BCD7F0;
+
+  /* ---- Chữ nút lệnh màn Đối chiếu (§71) ----
+     Nền SÁNG: chữ nút lệnh là xanh chủ đạo, y như `.gp-btn-primary` mặc định.
+     Nền TỐI: khối `.gp-dc-page.gp-dc-dark` (gpacc-v2.css §71) ghi đè token này bằng
+     color-mix cho dịu mắt — cùng cách nó ghi đè --gp-ink / --gp-text-muted / --gp-border.
+     ‼ Phải KHAI Ở ĐÂY chứ không chỉ khai trong khối tối: 3 bộ canh §26/§63/§71 quét từ
+     mốc § tới CUỐI tệp .css và bắt mọi `--gp-*` chưa có trong tệp token (§0.8). */
+  --gp-dc-command-fg:  var(--gp-primary);
+
+  /* ---- Viền & nền ---- */
+  --gp-border:         #e4e9f0;
+  --gp-border-soft:    #eef2f7;
+  --gp-rule:           #f2f5f9;   /* kẻ hàng bảng         */
+  --gp-bg-page:        #eef1f6;
+  --gp-bg-panel:       #ffffff;
+  --gp-bg-subtle:      #fbfcfe;
+  --gp-bg-subtle-2:    #f6f8fb;
+  --gp-bg-thead:       #f2f6fb;
+
+  /* ---- Pill nền / chữ (4 trạng thái + AI) ---- */
+  --gp-pill-info-bg:   #EAF2FC;  --gp-pill-info-fg:  #0F6CBD;  /* info    */
+  --gp-pill-done-bg:   #E7F4F0;  --gp-pill-done-fg:  #0B6B5E;  /* done    */
+  --gp-pill-wait-bg:   #FFF6DB;  --gp-pill-wait-fg:  #8a6d00;  /* wait    */
+  --gp-pill-warn-bg:   #FBE9E7;  --gp-pill-warn-fg:  #C42B1C;  /* warn    */
+  --gp-pill-ai-bg:     #EDE9FB;  --gp-pill-ai-fg:    #5b3fbf;  /* AI / CT TNCN */
+  --gp-pill-btp-bg:    #EDE9FB;  --gp-pill-btp-fg:   #5b3fbf;  /* BTP bán thành phẩm (giá thành) */
+
+  /* ---- Nhận diện nguồn chứng từ (mặc định NH/info; component đổi bằng token sẵn có) ---- */
+  --gp-source-accent:  var(--gp-primary);
+  --gp-source-soft:    var(--gp-pill-info-bg);
+  --gp-source-fg:      var(--gp-pill-info-fg);
+
+  /* ---- Chữ (font) — xem ghi chú đầu tệp trước khi đổi ---- */
+  --gp-font: 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+
+  /* ---- Bo góc ---- */
+  --gp-radius-card:   14px;
+  --gp-radius-btn:     9px;
+  --gp-radius-pill:   20px;
+  --gp-radius-input:  10px;
+  --gp-radius-icon:   11px;
+
+  /* ---- Tham số bố cục đặt lại được theo từng phần tử ----
+     Khác token màu: giá trị dưới đây là MẶC ĐỊNH, template ghi đè ngay trên thẻ khi cần
+     (vd bảng “soi lệch” của Tờ khai đặt `style="--gp-soi-min-w: …px"` theo số vùng bày ra).
+     ‼ Vẫn phải KHAI Ở ĐÂY: các bộ canh CSS (`test_v2_ccnhanh` §26 · `test_v2_nh_mat_xich` §63
+     · `test_v2_doichieu_visual_language` §71) quét từ mốc § tới CUỐI FILE và bắt mọi `--gp-*`
+     chưa có trong tệp token — đúng luật §GĐ4av “token không tồn tại → nền rỗng, im lặng”. */
+  --gp-soi-min-w:    960px;
+
+  /* ---- Toạ độ vệt sáng Fluent (§81j) ----
+     JS của Tổng quan ghi đè hai biến này theo vị trí con trỏ trên từng thẻ; mặc định đặt
+     giữa để khi JS chưa chạy (hoặc người dùng bật «giảm chuyển động») vệt vẫn nằm chính
+     giữa chứ không nhảy về góc. ‼ Phải KHAI Ở ĐÂY: ba bộ canh CSS bắt mọi `--gp-*` chưa có
+     trong tệp token — đã đỏ đúng chỗ này ngày 14/08. */
+  --gp-mx: 50%;
+  --gp-my: 50%;
+
+  /* ---- Đổ bóng ---- */
+  --gp-shadow-card:  0 2px 10px rgba(18,49,79,.04);
+  --gp-shadow-hover: 0 10px 28px rgba(18,49,79,.10);
+  --gp-shadow-modal: 0 30px 90px rgba(10,40,80,.45);
+  --gp-shadow-drawer:-20px 0 60px rgba(10,40,80,.3);
+
+  /* ---- DI SẢN KHÔNG KÍCH HOẠT · HR SoftUI (§4.4) ----
+     Từ 23/07/2026 HR đã về `.gp-hrm-fluent`; giữ token để tra lịch sử, template sống không dùng. */
+  --gp-hr-ground:       #E9EEF6;
+  --gp-hr-card:         #FFFFFF;
+  --gp-hr-field:        #E2E8F2;
+  --gp-hr-line:         #E4E9F1;
+  --gp-hr-brand:        #2D5BD0;
+  --gp-hr-navy:         #1E3A6E;
+  --gp-hr-ink:          #1F2A44;
+  --gp-hr-body:         #4B5563;
+  --gp-hr-muted:        #9AA3B2;
+  --gp-hr-faint:        #C4CBD6;
+  --gp-hr-placeholder:  #98A2B5;
+  --gp-hr-good:         #16A34A;
+  --gp-hr-good-bg:      #E7F6EC;
+  --gp-hr-amber:        #F59E0B;
+  --gp-hr-amber-bg:     #FEF4E2;
+  --gp-hr-red:          #EF4444;
+  --gp-hr-red-bg:       #FDECEC;
+  --gp-hr-purple:       #8B5CF6;
+  --gp-hr-purple-bg:    #EEEAFD;
+  --gp-hr-teal:         #0EA5A5;
+  --gp-hr-teal-bg:      #E2F4F4;
+  --gp-hr-green:        #22C55E;
+  --gp-hr-blue-bg:      #EAF1FE;
+  --gp-hr-row-hover:    #FAFBFD;
+  --gp-hr-welcome-a:    #E7ECFB;
+  --gp-hr-welcome-b:    #EEF0FB;
+  --gp-hr-welcome-c:    #F1EEFB;
+  --gp-hr-shadow:       0 2px 6px rgba(23,37,66,.05), 0 18px 34px -12px rgba(23,37,66,.17);
+  --gp-hr-shadow-sm:    0 1px 2px rgba(23,37,66,.06), 0 7px 16px -5px rgba(23,37,66,.15);
+  --gp-hr-shadow-hover: 0 4px 10px rgba(23,37,66,.08), 0 24px 44px -12px rgba(23,37,66,.24);
+  --gp-hr-shadow-brand: 0 2px 5px rgba(45,91,208,.25), 0 12px 24px -8px rgba(45,91,208,.5);
+  --gp-hr-inset:        inset 2px 2px 6px rgba(23,37,66,.13), inset -2px -2px 5px rgba(255,255,255,.9);
+  --gp-hr-radius-card:  16px;
+  --gp-hr-radius-welcome: 18px;
+  --gp-hr-radius-control: 12px;
+  --gp-hr-gap:          9px;
+
+  /* ---- Khung ---- */
+  --gp-max-width:     1800px;   /* cap toàn app             */
+  --gp-pad-x:           26px;   /* padding 2 bên mọi màn    */
+  --gp-rail:           262px;   /* rail master-detail       */
+  --gp-topbar-h:        56px;
+}
